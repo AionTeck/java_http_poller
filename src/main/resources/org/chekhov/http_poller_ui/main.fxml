@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.chekhov.http_poller_ui.controller.MainController"
+            stylesheets="@styles.css"
+>
+
+    <center>
+        <HBox>
+            <!-- ===== Левая панель: конфиг ===== -->
+            <VBox styleClass="left-panel" spacing="14" minWidth="300" maxWidth="300">
+                <!-- URL -->
+                <VBox spacing="4">
+                    <Label text="URL" styleClass="field-label"/>
+                    <TextField fx:id="urlField"
+                               promptText="https://api.example.com/endpoint"
+                               styleClass="field-input"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Timing -->
+                <VBox spacing="8">
+                    <Label text="TIMING" styleClass="section-label"/>
+                    <HBox spacing="10">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Timeout (ms)" styleClass="field-label"/>
+                            <TextField fx:id="timeoutField" text="5000" styleClass="field-input"/>
+                        </VBox>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Delay (ms)" styleClass="field-label"/>
+                            <TextField fx:id="delayField" text="2" styleClass="field-input"/>
+                        </VBox>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Polling (min)" styleClass="field-label"/>
+                            <TextField fx:id="pollingField" text="5" styleClass="field-input"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Headers -->
+                <VBox spacing="8" VBox.vgrow="ALWAYS">
+                    <Label text="HEADERS" styleClass="section-label"/>
+                    <TableView fx:id="headersTable" styleClass="headers-table" editable="true" fixedCellSize="40">
+                        <columns>
+                            <TableColumn fx:id="headerKeyColumn" text="Key"
+                                         minWidth="100" maxWidth="200"/>
+                            <TableColumn fx:id="headerValueColumn" text="Value"
+                                         minWidth="100" maxWidth="200"/>
+                            <TableColumn fx:id="headerDeleteColumn" text=""
+                                         minWidth="36" maxWidth="36" resizable="false"/>
+                        </columns>
+                    </TableView>
+                    <Button text="+ Add header" onAction="#onAddHeader"
+                            styleClass="link-button"/>
+                </VBox>
+
+                <!-- Кнопки -->
+                <HBox spacing="8">
+                    <Button text="Reset" onAction="#onReset"
+                            styleClass="btn-secondary" HBox.hgrow="ALWAYS"
+                            maxWidth="Infinity"/>
+                    <Button fx:id="startStopBtn" text="Run" onAction="#onStartStop"
+                            styleClass="btn-primary" HBox.hgrow="ALWAYS"
+                            maxWidth="Infinity"/>
+                </HBox>
+            </VBox>
+
+            <!-- ===== Правая панель: результаты ===== -->
+            <VBox styleClass="right-panel" spacing="14" HBox.hgrow="ALWAYS">
+                <Label text="Results" styleClass="section-label"/>
+
+                <!-- Stat cards -->
+                <HBox spacing="10">
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                        <Label text="Current status" styleClass="stat-label"/>
+                        <Label fx:id="currentStatusLabel" text="—" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                        <Label text="Response time" styleClass="stat-label"/>
+                        <Label fx:id="currentTimeLabel" text="—" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                        <Label text="Avg response time" styleClass="stat-label"/>
+                        <Label fx:id="avgTimeLabel" text="—" styleClass="stat-value"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Счётчики -->
+                <HBox spacing="8">
+                    <Label fx:id="okBadge" text="Success: 0" styleClass="badge badge-ok"/>
+                    <Label fx:id="errorBadge" text="Errors 4xx/5xx: 0" styleClass="badge badge-error"/>
+                    <Label fx:id="timeoutBadge" text="Timeouts: 0" styleClass="badge badge-timeout"/>
+                </HBox>
+
+                <!-- Прогресс -->
+                <VBox styleClass="progress-card" spacing="6">
+                    <HBox>
+                        <Label text="Session progress: " styleClass="field-label"/>
+                        <Label fx:id="progressTimeLabel" text="0:00 / 0:00"
+                               styleClass="field-label" HBox.hgrow="ALWAYS"
+                               style="-fx-alignment: CENTER_RIGHT;"/>
+                    </HBox>
+                    <ProgressBar fx:id="sessionProgressBar" progress="0"
+                                 maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Лог -->
+                <VBox VBox.vgrow="ALWAYS" styleClass="log-card">
+                    <HBox styleClass="log-header">
+                        <Label text="Requests log " styleClass="section-label"
+                               style="-fx-padding: 0;"/>
+                        <Label text="last 200" styleClass="log-hint"
+                               HBox.hgrow="ALWAYS"
+                               style="-fx-alignment: CENTER_RIGHT;"/>
+                    </HBox>
+                    <TableView fx:id="logTable" VBox.vgrow="ALWAYS"
+                               styleClass="log-table">
+                        <columns>
+                            <TableColumn fx:id="logTimeColumn" text="Time"/>
+                            <TableColumn fx:id="logStatusColumn" text="Status"/>
+                            <TableColumn fx:id="logResponseTimeColumn" text="Request time" prefWidth="110"/>
+                            <TableColumn fx:id="logAvgResponseTimeColumn" text="Avg" prefWidth="110"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>
