@@ -2,6 +2,14 @@
 .root {
     -fx-font-family: 'JetBrains Mono';
     -fx-font-size: 13px;
+
+    -color-bg-default: #191A1C;
+    -color-bg-subtle:  #26282C;
+    -color-bg-inset:   #13141a;
+
+    -color-border-default: #2B2D30;
+    -color-border-muted: #2B2D30;
+    -color-border-subtle: #2B2D30;
 }
 
 /* ── Layout ─────────────────────────────────────────────────── */
@@ -214,4 +222,18 @@
     -fx-background-color: -color-accent-subtle;
     -fx-border-color: -color-accent-emphasis;
     -fx-border-width: 1px;
+}
+
+.table-view .column-header {
+    -fx-pref-height: 30px;
+    -fx-padding: 0 8px;
+}
+
+.table-view .column-header-background {
+    -fx-pref-height: 30px;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 13px;
+    -fx-padding: 0;
 }

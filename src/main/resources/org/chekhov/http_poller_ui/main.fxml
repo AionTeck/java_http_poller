@@ -11,7 +11,7 @@
     <center>
         <HBox>
             <!-- ===== Левая панель: конфиг ===== -->
-            <VBox styleClass="left-panel" spacing="14" minWidth="300" maxWidth="300">
+            <VBox styleClass="left-panel" spacing="14" minWidth="400" maxWidth="420">
                 <!-- URL -->
                 <VBox spacing="4">
                     <Label text="URL" styleClass="field-label"/>
@@ -49,10 +49,10 @@
                     <TableView fx:id="headersTable" styleClass="headers-table" editable="true" fixedCellSize="40">
                         <columns>
                             <TableColumn fx:id="headerKeyColumn" text="Key"
-                                         minWidth="100" maxWidth="200"/>
+                                         minWidth="175" maxWidth="220" resizable="false"/>
                             <TableColumn fx:id="headerValueColumn" text="Value"
-                                         minWidth="100" maxWidth="200"/>
-                            <TableColumn fx:id="headerDeleteColumn" text=""
+                                         minWidth="175" maxWidth="220" resizable="false"/>
+                            <TableColumn fx:id="headerDeleteColumn"
                                          minWidth="36" maxWidth="36" resizable="false"/>
                         </columns>
                     </TableView>
@@ -99,7 +99,7 @@
                 </HBox>
 
                 <!-- Прогресс -->
-                <VBox styleClass="progress-card" spacing="6">
+                <VBox styleClass="progress-card" spacing="6" minHeight="60">
                     <HBox>
                         <Label text="Session progress: " styleClass="field-label"/>
                         <Label fx:id="progressTimeLabel" text="0:00 / 0:00"
@@ -124,8 +124,8 @@
                         <columns>
                             <TableColumn fx:id="logTimeColumn" text="Time"/>
                             <TableColumn fx:id="logStatusColumn" text="Status"/>
-                            <TableColumn fx:id="logResponseTimeColumn" text="Request time" prefWidth="110"/>
-                            <TableColumn fx:id="logAvgResponseTimeColumn" text="Avg" prefWidth="110"/>
+                            <TableColumn fx:id="logResponseTimeColumn" text="Request time" prefWidth="130"/>
+                            <TableColumn fx:id="logAvgResponseTimeColumn" text="Avg" prefWidth="90"/>
                         </columns>
                     </TableView>
                 </VBox>

@@ -28,7 +28,7 @@ public class App extends Application {
                 App.class.getResource("main.fxml")
         );
 
-        Scene scene = new Scene(loader.load(), 900, 500);
+        Scene scene = new Scene(loader.load(), 1000, 520);
         scene.getStylesheets().add(
                 Objects.requireNonNull(App.class.getResource("styles.css")).toExternalForm()
         );
@@ -42,8 +42,8 @@ public class App extends Application {
         );
 
         stage.setTitle("HTTP Poller");
-        stage.setMinWidth(750);
-        stage.setMinHeight(500);
+        stage.setMinWidth(900);
+        stage.setMinHeight(520);
         stage.setScene(scene);
         stage.show();
     }
