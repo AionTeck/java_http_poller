@@ -41,9 +41,11 @@ jobs:
           distribution: 'temurin'
 
       - name: Build runtime image
+        shell: bash
         run: mvn clean javafx:jlink
 
       - name: Package EXE
+        shell: bash
         run: mvn jpackage:jpackage -Djpackage.type=EXE -Djpackage.icon=src/main/resources/org/chekhov/http_poller_ui/icons/AppIcon.ico
 
       - name: Upload EXE
