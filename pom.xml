@@ -12,18 +12,21 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.12.1</junit.version>
+        <javafx.version>21.0.6</javafx.version>
+        <jpackage.type>DMG</jpackage.type>
+        <jpackage.icon>src/main/resources/org/chekhov/http_poller_ui/icons/AppIcon.icns</jpackage.icon>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>21.0.6</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>21.0.6</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>net.synedra</groupId>
@@ -37,6 +40,17 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-base</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.44</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
@@ -48,18 +62,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.44</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.mkpaz</groupId>
-            <artifactId>atlantafx-base</artifactId>
-            <version>2.1.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -69,8 +71,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>24</source>
-                    <target>24</target>
+                    <source>22</source>
+                    <target>22</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -88,22 +90,45 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.chekhov.http_poller_ui/org.chekhov.http_poller_ui.App
+                            <mainClass>
+                                org.chekhov.http_poller_ui/org.chekhov.http_poller_ui.App
                             </mainClass>
                             <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
+                            <jlinkZipName>http-poller</jlinkZipName>
+                            <jlinkImageName>http-poller</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
+                            <jmodsPathString>${project.basedir}/jmods</jmodsPathString>
                         </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>org.chekhov.http_poller_ui.App</mainClass>
                     <options>
                         <option>--enable-native-access=javafx.graphics</option>
                     </options>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <name>HTTP Poller</name>
+                    <appVersion>${project.version}</appVersion>
+                    <vendor>Artem Plisesnikov</vendor>
+                    <copyright>2026 Artem Plisesnikov</copyright>
+                    <destination>target/dist</destination>
+                    <runtimeImage>target/http-poller</runtimeImage>
+                    <module>org.chekhov.http_poller_ui/org.chekhov.http_poller_ui.App</module>
+                    <javaOptions>
+                        <option>--enable-native-access=javafx.graphics</option>
+                    </javaOptions>
+                    <type>${jpackage.type}</type>
+                    <icon>${jpackage.icon}</icon>
+                    <macPackageName>HTTP Poller</macPackageName>
+                    <macPackageIdentifier>org.chekhov.http_poller_ui</macPackageIdentifier>
                 </configuration>
             </plugin>
         </plugins>
