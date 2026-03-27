@@ -4,6 +4,7 @@ import atlantafx.base.theme.NordDark;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -31,6 +32,15 @@ public class App extends Application {
         scene.getStylesheets().add(
                 Objects.requireNonNull(App.class.getResource("styles.css")).toExternalForm()
         );
+
+        stage.getIcons().add(
+                new Image(
+                        Objects.requireNonNull(
+                                App.class.getResourceAsStream("icons/icon.png")
+                        )
+                )
+        );
+
         stage.setTitle("HTTP Poller");
         stage.setMinWidth(750);
         stage.setMinHeight(500);
