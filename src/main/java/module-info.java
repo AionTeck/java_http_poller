@@ -6,6 +6,7 @@ module org.chekhov.http_poller_ui {
     requires atlantafx.base;
 
     requires static lombok;
+    requires java.naming;
 
     opens org.chekhov.http_poller_ui to javafx.fxml;
     opens org.chekhov.http_poller_ui.controller to javafx.fxml;

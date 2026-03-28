@@ -62,6 +62,9 @@
 
                 <!-- Кнопки -->
                 <HBox spacing="8">
+                    <Button fx:id="responseDurationChartBtn" text="Chart" onAction="#onOpenChart"
+                            styleClass="btn-secondary" HBox.hgrow="ALWAYS"
+                            maxWidth="Infinity"/>
                     <Button text="Reset" onAction="#onReset"
                             styleClass="btn-secondary" HBox.hgrow="ALWAYS"
                             maxWidth="Infinity"/>

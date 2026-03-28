@@ -1,7 +1,10 @@
 package org.chekhov.http_poller_ui.service;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.chekhov.http_poller_ui.model.PollResult;
 
 import java.net.URI;
@@ -15,15 +18,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class PollerService {
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final AtomicBoolean running = new AtomicBoolean(false);
+
     private String url;
     private int timeoutMs;
     private int delayMs;
     private Map<String, String> headers;
     private Duration pollingMinutes;
 
-    private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final AtomicBoolean running = new AtomicBoolean(false);
     private Thread pollerThread;
+    @Getter
+    private final BooleanProperty isConfigured = new SimpleBooleanProperty(false);
 
     public void configure(String url, int timeoutMs, int delayMs, Duration pollingMinutes, Map<String, String> headers) {
         this.url = url;
@@ -31,6 +37,8 @@ public class PollerService {
         this.delayMs = delayMs;
         this.pollingMinutes = pollingMinutes;
         this.headers = headers;
+
+        this.isConfigured.set(true);
     }
 
     public void start(
@@ -63,6 +71,7 @@ public class PollerService {
 
     public void stop() {
         running.set(false);
+        this.isConfigured.set(false);
         if (pollerThread != null) {
             pollerThread.interrupt();
         }

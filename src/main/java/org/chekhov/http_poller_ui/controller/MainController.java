@@ -8,15 +8,23 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.chekhov.http_poller_ui.App;
 import org.chekhov.http_poller_ui.model.HeaderEntry;
 import org.chekhov.http_poller_ui.model.PollResult;
 import org.chekhov.http_poller_ui.service.PollerService;
 
+import javax.naming.Binding;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MainController {
@@ -31,6 +39,7 @@ public class MainController {
     @FXML private TableColumn<HeaderEntry, Void> headerDeleteColumn;
 
     @FXML private Button startStopBtn;
+    @FXML private Button responseDurationChartBtn;
 
     @FXML private Label currentStatusLabel;
     @FXML private Label currentTimeLabel;
@@ -60,18 +69,54 @@ public class MainController {
     private int countError;
     private int countTimeout;
 
+    private Stage responseDurationChartStage;
+    private ResponseDurationController responseDurationController;
+
     @FXML
     public void initialize() {
         setupHeadersTable();
         setupLogTable();
         headersTable.setItems(headers);
         logTable.setItems(logItems);
-        headersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        headersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         headers.addListener((javafx.collections.ListChangeListener<HeaderEntry>) change -> {
             headersTable.setPrefHeight(40 + headers.size() * 40 + 2);
         });
         headersTable.setPrefHeight(72);
+
+        responseDurationChartBtn.disableProperty().bind(
+                Bindings.createBooleanBinding(
+                        () -> !pollerService.getIsConfigured().get(),
+                        pollerService.getIsConfigured()
+                )
+        );
+
+        try {
+            initResponseDurationChartWindow();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void initResponseDurationChartWindow() throws Exception {
+        FXMLLoader loader = new FXMLLoader(
+                App.class.getResource("response_duration_chart.fxml")
+        );
+
+        Parent root = loader.load();
+        responseDurationController = loader.getController();
+
+        responseDurationChartStage = new Stage();
+        responseDurationChartStage.setTitle("Response time chart");
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(
+                Objects.requireNonNull(App.class.getResource("response-duration-chart-window.css")).toExternalForm()
+        );
+
+        responseDurationChartStage.setScene(scene);
+        responseDurationChartStage.initModality(Modality.NONE);
     }
 
     private void setupHeadersTable() {
@@ -149,6 +194,10 @@ public class MainController {
         responseTimes.clear();
         countOk = countError = countTimeout = 0;
         resetStatLabels();
+
+        if (responseDurationController != null) {
+            responseDurationController.clear();
+        }
     }
 
     @FXML
@@ -191,6 +240,11 @@ public class MainController {
                 delay,
                 pollingTime,
                 headerMap
+        );
+
+        responseDurationController.configure(
+                pollingTime,
+                delay
         );
 
         sessionElapsedSec = 0;
@@ -260,6 +314,11 @@ public class MainController {
         okBadge.setText(String.format("Success: %d", countOk));
         errorBadge.setText(String.format("Errors 4xx/5xx: %d", countError));
         timeoutBadge.setText(String.format("Timeouts: %d", countTimeout));
+
+        if (responseDurationChartStage != null
+            && responseDurationChartStage.isShowing()) {
+            responseDurationController.addPoint(result.getFormattedTime(), result.getResponseMs());
+        }
     }
 
     private void resetStatLabels() {
@@ -289,5 +348,20 @@ public class MainController {
         Alert alert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         alert.setHeaderText(null);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void onOpenChart() throws Exception {
+        if (responseDurationChartStage.getIcons().isEmpty()) {
+            responseDurationChartStage.getIcons().addAll(
+                    ((Stage) startStopBtn.getScene().getWindow()).getIcons()
+            );
+        }
+
+        if (responseDurationChartStage.isShowing()) {
+            responseDurationChartStage.requestFocus();
+        } else {
+            responseDurationChartStage.show();
+        }
     }
 }

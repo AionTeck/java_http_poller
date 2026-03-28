@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<?import javafx.scene.control.ScrollPane?>
+<BorderPane
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="org.chekhov.http_poller_ui.controller.ResponseDurationController"
+        stylesheets="response-duration-chart-window.css"
+        prefHeight="400"
+        prefWidth="700">
+    <center>
+        <ScrollPane fx:id="scrollPane"
+                    fitToHeight="true"
+                    pannable="true"
+                    hbarPolicy="ALWAYS"
+                    vbarPolicy="NEVER">
+            <LineChart fx:id="responseDurationChart"
+                       animated="false"
+                       legendVisible="false"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity">
+                <xAxis>
+                    <CategoryAxis fx:id="chartXAxis" label="Time"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="chartYAxis" label="ms" side="LEFT"/>
+                </yAxis>
+            </LineChart>
+        </ScrollPane>
+    </center>
+</BorderPane>
